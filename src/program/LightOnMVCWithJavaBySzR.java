@@ -4,6 +4,10 @@
  */
 package program;
 
+import controller.LightOnController;
+import model.LightOn;
+import view.LightOnGUIView;
+
 /**
  *
  * @author SzabóRoland(SZF_2024
@@ -14,7 +18,7 @@ public class LightOnMVCWithJavaBySzR {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        new LightOnController(new LightOn(), new LightOnGUIView());
     }
     
 }
