@@ -5,19 +5,29 @@
 package view;
 
 import java.awt.Color;
+import javax.swing.JLabel;
 
 /**
  *
  * @author SzabóRoland(SZF_2024
  */
 public class LightOnGUIView extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form LightOnGUIView
      */
     public LightOnGUIView() {
         initComponents();
-        this.setBackground(Color.black);
+        this.getContentPane().setBackground(Color.black);
+        JLabel[] jLabels = new JLabel[]{
+            this.jLabel1,
+            this.jLabel2,
+            this.jLabel3,
+            this.jLabel4
+        };
+        for (int i = 0; i < jLabels.length; i++) {
+            jLabels[i].setForeground(Color.white);
+        }
     }
 
     /**
@@ -48,7 +58,7 @@ public class LightOnGUIView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
 
-        jPanel1.setBackground(new java.awt.Color(51, 51, 0));
+        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
         jButton1.setBackground(new java.awt.Color(255, 255, 51));
