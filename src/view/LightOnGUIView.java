@@ -7,6 +7,7 @@ package view;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.TrayIcon;
+import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import model.LightOn;
@@ -65,6 +66,10 @@ public class LightOnGUIView extends javax.swing.JFrame {
             this.lights[i].setEnabled(false);
         }
         JOptionPane.showMessageDialog(this, "Gratulálok!\nSikerült lekapcsolnod az összes lámpát.", "Nyertél!", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public Light[] getLights(){
+        return this.lights;
     }
     
     /**
