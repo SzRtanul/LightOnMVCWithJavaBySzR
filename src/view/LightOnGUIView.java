@@ -5,14 +5,19 @@
 package view;
 
 import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.TrayIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import model.LightOn;
+import modelforview.Light;
 
 /**
  *
  * @author SzabóRoland(SZF_2024
  */
 public class LightOnGUIView extends javax.swing.JFrame {
-    
+    Light[] lights;
     /**
      * Creates new form LightOnGUIView
      */
@@ -29,7 +34,39 @@ public class LightOnGUIView extends javax.swing.JFrame {
             jLabels[i].setForeground(Color.white);
         }
     }
-
+    
+    public final void doGeneral(boolean[] lights){
+        jPanel1.removeAll();
+        var lay = new GridLayout(3,3,2,2);
+     /*   lay.setHgap(50);
+        lay.setVgap(50);*/
+        jPanel1.setLayout(lay);
+        this.lights = new Light[lights.length];
+        for (int i = 0; i < lights.length; i++) {
+            this.lights[i] = new Light(lights[i]);
+            jPanel1.add(this.lights[i]);
+        }
+        jPanel1.updateUI();
+        jPanel1.validate();
+        jPanel1.repaint();
+    }
+    
+    public void doFrissit(boolean[] lights){
+        for (int i = 0; i < lights.length; i++) {
+            this.lights[i].setOn(lights[i]);
+        }
+        jPanel1.updateUI();
+        jPanel1.validate();
+        jPanel1.repaint();
+    }
+    
+    public void doWin(){
+        for (int i = 0; i < this.lights.length; i++) {
+            this.lights[i].setEnabled(false);
+        }
+        JOptionPane.showMessageDialog(this, "Gratulálok!\nSikerült lekapcsolnod az összes lámpát.", "Nyertél!", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,7 +95,7 @@ public class LightOnGUIView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
 
-        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
         jButton1.setBackground(new java.awt.Color(255, 255, 51));
@@ -118,10 +155,11 @@ public class LightOnGUIView extends javax.swing.JFrame {
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
