@@ -16,9 +16,27 @@ import view.LightOnGUIView;
  */
 public class LightOnController {
     public LightOnController(LightOn model, LightOnGUIView view){
-        view.doGeneral(model.getJatekter());
-        Light[] lights = view.getLights();
+        this.reActions(model, view);
+        view.Bt_exit.addActionListener((e) -> {
+            view.doExit();
+        });
+        view.Bt_restart.addActionListener((e) -> {
+            model.doRestart();
+            this.reActions(model, view);
+        });
+        view.Bt_load.addActionListener((e) -> {
+            if(model.doLoad()) this.reActions(model, view);
+        });
+        view.Bt_save.addActionListener((e) -> {
+            view.doSave(model.doSave());
+        });
         view.setVisible(true);
+    }
+    
+    public void reActions(LightOn model, LightOnGUIView view){
+        view.doGeneral(model.getJatekter());
+        view.setLabels(model);
+        Light[] lights = view.getLights();
         for (int i = 0; i < model.getHossz(); i++) {
             final int it = i;
             lights[i].addActionListener(new ActionListener(){
@@ -27,6 +45,7 @@ public class LightOnController {
                     model.doKattint(it);
                     view.doFrissit(model.getJatekter());
                     if(model.isWin()) view.doWin();
+                    view.setLabels(model);
                 }
             });
         }

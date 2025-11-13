@@ -27,16 +27,23 @@ public class LightOnGUIView extends javax.swing.JFrame {
         this.getContentPane().setBackground(Color.black);
         JLabel[] jLabels = new JLabel[]{
             this.jLabel1,
-            this.jLabel2,
+            this.La_szamlal,
             this.jLabel3,
-            this.jLabel4
+            this.jLabel4,
+            this.jLabel13,
+            this.La_muvelet
         };
         for (int i = 0; i < jLabels.length; i++) {
             jLabels[i].setForeground(Color.white);
         }
     }
     
-    public final void doGeneral(boolean[] lights){
+    public void setLabels(LightOn model){
+        La_muvelet.setText(model.getLepes()+"");
+    }
+    
+    public final void doGeneral(byte[] lights){
+        int ego = 0;
         jPanel1.removeAll();
         var lay = new GridLayout(3,3,2,2);
      /*   lay.setHgap(50);
@@ -44,21 +51,26 @@ public class LightOnGUIView extends javax.swing.JFrame {
         jPanel1.setLayout(lay);
         this.lights = new Light[lights.length];
         for (int i = 0; i < lights.length; i++) {
-            this.lights[i] = new Light(lights[i]);
+            if(lights[i] == 1) ego++;
+            this.lights[i] = new Light(lights[i] == 1);
             jPanel1.add(this.lights[i]);
         }
         jPanel1.updateUI();
         jPanel1.validate();
         jPanel1.repaint();
+        La_szamlal.setText(ego+"");
     }
     
-    public void doFrissit(boolean[] lights){
+    public void doFrissit(byte[] lights){
+        int ego = 0;
         for (int i = 0; i < lights.length; i++) {
-            this.lights[i].setOn(lights[i]);
+            this.lights[i].setOn(lights[i] == 1);
+            if(lights[i] == 1) ego++;
         }
         jPanel1.updateUI();
         jPanel1.validate();
         jPanel1.repaint();
+        La_szamlal.setText(ego+"");
     }
     
     public void doWin(){
@@ -66,6 +78,15 @@ public class LightOnGUIView extends javax.swing.JFrame {
             this.lights[i].setEnabled(false);
         }
         JOptionPane.showMessageDialog(this, "Gratulálok!\nSikerült lekapcsolnod az összes lámpát.", "Nyertél!", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void doSave(boolean sikeres){
+        //JOptionPane.showMessageDialog(this, "Gratulálok!\nSikerült lekapcsolnod az összes lámpát.", "Mentés", JOptionPane.INFORMATION_MESSAGE);
+        System.out.println("Mentés sikeres.");
+    }
+    
+    public void doExit(){
+        System.exit(0);
     }
     
     public Light[] getLights(){
@@ -92,10 +113,15 @@ public class LightOnGUIView extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton10 = new javax.swing.JButton();
+        La_szamlal = new javax.swing.JLabel();
+        Bt_restart = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        Bt_exit = new javax.swing.JButton();
+        Bt_save = new javax.swing.JButton();
+        Bt_load = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        La_muvelet = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -170,52 +196,84 @@ public class LightOnGUIView extends javax.swing.JFrame {
 
         jLabel1.setText("Felkapcsolt lámpák száma:");
 
-        jLabel2.setText("8");
+        La_szamlal.setText("8");
 
-        jButton10.setText("Újra");
+        Bt_restart.setText("Újra");
 
         jLabel3.setFont(new java.awt.Font("Sitka Text", 0, 18)); // NOI18N
         jLabel3.setText("LightOn");
 
         jLabel4.setText("Kapcsold le az összes lámpát!");
 
+        Bt_exit.setText("Kilépés");
+
+        Bt_save.setText("Mentés");
+
+        Bt_load.setText("Betöltés");
+
+        jLabel13.setText("Művelet:");
+
+        La_muvelet.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)))
+                        .addComponent(Bt_save)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Bt_load)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Bt_exit))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(116, 116, 116)
-                        .addComponent(jButton10)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Bt_restart))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel13)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(La_szamlal)
+                                    .addComponent(La_muvelet))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4))
+                    .addComponent(Bt_restart))
                 .addGap(9, 9, 9)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addComponent(jButton10)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(La_szamlal))
+                .addGap(2, 2, 2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(La_muvelet))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Bt_exit)
+                    .addComponent(Bt_load)
+                    .addComponent(Bt_save))
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -257,8 +315,13 @@ public class LightOnGUIView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton Bt_exit;
+    public javax.swing.JButton Bt_load;
+    public javax.swing.JButton Bt_restart;
+    public javax.swing.JButton Bt_save;
+    private javax.swing.JLabel La_muvelet;
+    private javax.swing.JLabel La_szamlal;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -268,7 +331,7 @@ public class LightOnGUIView extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;

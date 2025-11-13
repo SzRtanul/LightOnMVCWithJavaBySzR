@@ -4,6 +4,9 @@
  */
 package model;
 
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 /**
@@ -15,7 +18,7 @@ public class LightOn {
     int oszlop;
     int hossz;
     boolean win;
-    boolean[] jatekter;
+    byte[] jatekter;
 
     public LightOn() {
         doRestart();
@@ -24,9 +27,31 @@ public class LightOn {
     public final void doRestart() {
         this.oszlop = 3;
         this.hossz = oszlop * 3;
-        this.jatekter = new boolean[this.hossz];
+        this.jatekter = new byte[this.hossz+1];
         int rand = (int) (Math.random() * hossz);
-        jatekter[rand] = true;
+        jatekter[rand] = 1;
+    }
+    
+    public boolean doSave(){
+        boolean both = !win;
+        if(both){
+            try {
+                Files.write(Path.of("yea.gs"), jatekter);
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return both;
+    }
+    
+    public boolean doLoad(){
+        try {
+            if(Files.exists(Path.of("yea.gs"))) this.jatekter = Files.readAllBytes(Path.of("yea.gs"));
+            else return false;
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     public boolean doKattint(int hely) {
@@ -34,15 +59,20 @@ public class LightOn {
         if (both) {
             int mino = hely - oszlop;
             int maxo = hely + oszlop;
+            byte h = 0;
             if (mino >= 0) {
-                jatekter[mino] = !jatekter[mino];
+                h = jatekter[mino];
+                jatekter[mino] = h == 1 ? (byte)0 : (byte)1;
             }
             if (maxo < hossz) {
-                jatekter[maxo] = !jatekter[maxo];
+                h = jatekter[maxo];
+                jatekter[maxo] = h == 1 ? (byte)0 : (byte)1;
             }
             for (int i = hely - (hely % this.oszlop > 0 ? 1 : 0); i < hely + ((hely + 1) % this.oszlop == 0 ? 1 : 2); i++) {
-                this.jatekter[i] = !this.jatekter[i];
+                h = this.jatekter[i];
+                this.jatekter[i] = h == 1 ? (byte)0 : 1;
             }
+            jatekter[this.hossz]++;
             this.win = checkWin();
         }
         return both;
@@ -59,7 +89,7 @@ public class LightOn {
     private boolean checkWin() {
         boolean both = true;
         for (int i = 0; i < this.hossz && both; i++) {
-            both = !jatekter[i];
+            both = this.jatekter[i] == 0;
         }
         return both;
     }
@@ -68,7 +98,11 @@ public class LightOn {
         return win;
     }
 
-    public boolean[] getJatekter() {
-        return Arrays.copyOf(jatekter, jatekter.length);
+    public byte[] getJatekter() {
+        return Arrays.copyOf(jatekter, jatekter.length-1);
+    }
+    
+    public byte getLepes(){
+        return jatekter[this.hossz];
     }
 }
